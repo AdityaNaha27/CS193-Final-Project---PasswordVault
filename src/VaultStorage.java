@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -36,5 +38,21 @@ public class VaultStorage {
         }
 
         return entries;
+    }
+
+    public void saveEntries(ArrayList<PasswordEntry> entries) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+
+            for (PasswordEntry entry : entries) {
+                writer.write(entry.getWebsite() + ","
+                        + entry.getUsername() + ","
+                        + entry.getPassword());
+
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error saving credentials.");
+        }
     }
 }
