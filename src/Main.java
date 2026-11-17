@@ -8,7 +8,9 @@ public class Main {
 
             VaultStorage storage = new VaultStorage("data/credentials.csv");
 
-            manager.getEntries().addAll(storage.loadEntries());
+            for (PasswordEntry entry : storage.loadEntries()) {
+                manager.addEntry(entry);
+            }
 
             new Dashboard(manager, storage);
         });

@@ -46,6 +46,8 @@ public class Dashboard {
         frame.add(mainPanel, BorderLayout.CENTER);
 
         addButton.addActionListener(e -> addCredential());
+        viewButton.addActionListener(e -> viewCredentials());
+        searchButton.addActionListener(e -> searchCredentials());
 
         frame.setSize(400, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,6 +98,69 @@ public class Dashboard {
 
                 JOptionPane.showMessageDialog(frame, "Credential added successfully!");
             }
+        }
+    }
+
+    private void viewCredentials() {
+        if (manager.getEntryCount() == 0) {
+            JOptionPane.showMessageDialog(frame, "No credentials saved yet.");
+            return;
+        }
+
+        StringBuilder message = new StringBuilder();
+
+        for (PasswordEntry entry : manager.getEntries()) {
+            message.append("Website: ")
+                    .append(entry.getWebsite())
+                    .append("\nUsername: ")
+                    .append(entry.getUsername())
+                    .append("\nPassword: ")
+                    .append(entry.getPassword())
+                    .append("\n\n");
+        }
+
+        JOptionPane.showMessageDialog(
+                frame,
+                message.toString(),
+                "Saved Credentials",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    private void searchCredentials() {
+        String website = JOptionPane.showInputDialog(
+                frame,
+                "Enter the website you want to search for:"
+        );
+
+        if (website == null || website.trim().isEmpty()) {
+            return;
+        }
+
+        String search = website.trim();
+        StringBuilder results = new StringBuilder();
+
+        for (PasswordEntry entry : manager.getEntries()) {
+            if (entry.getWebsite().toLowerCase().contains(search.toLowerCase())) {
+                results.append("Website: ")
+                        .append(entry.getWebsite())
+                        .append("\nUsername: ")
+                        .append(entry.getUsername())
+                        .append("\nPassword: ")
+                        .append(entry.getPassword())
+                        .append("\n\n");
+            }
+        }
+
+        if (results.length() == 0) {
+            JOptionPane.showMessageDialog(frame, "No matching credentials found.");
+        } else {
+            JOptionPane.showMessageDialog(
+                    frame,
+                    results.toString(),
+                    "Search Results",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         }
     }
 }
