@@ -48,6 +48,7 @@ public class Dashboard {
         addButton.addActionListener(e -> addCredential());
         viewButton.addActionListener(e -> viewCredentials());
         searchButton.addActionListener(e -> searchCredentials());
+        deleteButton.addActionListener(e -> deleteCredential());
 
         frame.setSize(400, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -161,6 +162,67 @@ public class Dashboard {
                     "Search Results",
                     JOptionPane.INFORMATION_MESSAGE
             );
+        }
+    }
+
+    private void deleteCredential() {
+        if (manager.getEntryCount() == 0) {
+            JOptionPane.showMessageDialog(frame, "No credentials available to delete.");
+            return;
+        }
+
+        String[] websites = new String[manager.getEntryCount()];
+
+        for (int i = 0; i < manager.getEntryCount(); i++) {
+            PasswordEntry entry = manager.getEntry(i);
+            websites[i] = entry.getWebsite() + " - " + entry.getUsername();
+        }
+
+        String selected = (String) JOptionPane.showInputDialog(
+                frame,
+                "Select the credential you want to delete:",
+                "Delete Credential",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                websites,
+                websites[0]
+        );
+
+        if (selected == null) {
+            return;
+        }
+
+        int index = -1;
+
+        for (int i = 0; i < websites.length; i++) {
+            if (websites[i].equals(selected)) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index != -1) {
+            int confirmation = JOptionPane.showConfirmDialog(
+                    frame,
+                    "Are you sure you want to delete this credential?",
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirmation == JOptionPane.YES_OPTION) {
+                java.util.ArrayList<PasswordEntry> entries = manager.getEntries();
+                entries.remove(index);
+
+                manager = new PasswordManager();
+
+                for (PasswordEntry entry : entries) {
+                    manager.addEntry(entry);
+                }
+
+                storage.saveEntries(manager.getEntries());
+
+                JOptionPane.showMessageDialog(frame, "Credential deleted successfully!");
+            }
         }
     }
 }
