@@ -8,3 +8,9 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+*.class
+out/
+.idea/
+*.iml
+data/*.csv
+backups/
