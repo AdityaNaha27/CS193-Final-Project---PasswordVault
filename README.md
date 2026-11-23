@@ -76,6 +76,8 @@ PasswordVault/
 ├── README.md
 └── .gitignore
 ```
+## Video Walkthrough
+- https://youtu.be/K7ZeAdZLx5s 
 
 ## Security Notice
 
